@@ -12,7 +12,6 @@ public class GameSetting {
 	private Random random;
 
 	private Hero hero;
-	private Boss[] zombies;
 	private Boss boss;
 
 	public GameSetting() {
@@ -20,8 +19,7 @@ public class GameSetting {
 		random = new Random();
 		scanner = new Scanner(System.in);
 		hero = new Hero(currentPos, 500, 50, 5);
-		zombies = new Boss[3];
-		boss = new Boss(10, 200, 100, 50);
+		boss = new Boss(10, 10, 10, 10);
 	}
 
 	public void run() {
@@ -39,11 +37,9 @@ public class GameSetting {
 				if (map[i] instanceof Hero) {
 					System.out.print("🏃 ");
 				} else if (map[i] instanceof Boss) {
-					if (map[i] == boss) {
-						System.out.print("🐲 ");
-					} else {
-						System.out.print("🧟 ");
-					}
+					System.out.print("🐲 ");
+				} else if (map[i] instanceof Zombie) {
+					System.out.print("🧟 ");
 				}
 			} else {
 				System.out.print("⬜ ");
@@ -59,9 +55,7 @@ public class GameSetting {
 		int move = scanner.nextInt();
 
 		if (move == 1) {
-
 			hero.setPos(hero.getPos() + 1);
-
 		} else if (move == 2) {
 			System.out.println("게임을 종료합니다.");
 			return;
@@ -137,8 +131,7 @@ public class GameSetting {
 		while (zombiesPlaced < 3) {
 			int position = random.nextInt(MAP_SIZE);
 			if (map[position] == null) {
-				zombies[zombiesPlaced] = new Boss(position, 100, 10, 0);
-				map[position] = zombies[zombiesPlaced];
+				map[position] = new Zombie(position, 10, 10, 0); 
 				zombiesPlaced++;
 			}
 		}
