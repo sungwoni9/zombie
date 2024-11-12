@@ -4,164 +4,178 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GameSetting {
-    int currentPos = 1;
-    private final int MAP_SIZE = 20;
-    private Unit[] map;
+	int currentPos = 0;
+	private final int MAP_SIZE = 20;
+	private Unit[] map;
 
-    private Scanner scanner;
-    private Random random;
+	private Scanner scanner;
+	private Random random;
 
-    private Hero hero;
-    private Boss[] zombies;
-    private Boss boss;
+	private Hero hero;
+	private Boss[] zombies;
+	private Boss boss;
 
-    public GameSetting() {
-        map = new Unit[MAP_SIZE];
-        random = new Random();
-        scanner = new Scanner(System.in);
-        hero = new Hero(currentPos, 500, 50, 5);
-        zombies = new Boss[3];
-        boss = new Boss(10, 200, 100, 50);
-    }
+	public GameSetting() {
+		map = new Unit[MAP_SIZE];
+		random = new Random();
+		scanner = new Scanner(System.in);
+		hero = new Hero(currentPos, 500, 50, 5);
+		zombies = new Boss[3];
+		boss = new Boss(10, 200, 100, 50);
+	}
 
-    public void run() {
-        printBoard();
-        setMap();
-        while (!gameOver()) {
-            gamePlay();
-        }
-    }
+	public void run() {
+		setMap();
+		printMap();
+		while (!gameOver()) {
+			gamePlay();
+		}
+	}
 
-    public void printBoard() {
-        System.out.println("==== Zombie Game ====");
-        System.out.println("캐릭터 설명:");
-        System.out.println("🧟 : 좀비");
-        System.out.println("🐲 : 보스");
-        System.out.println("🏃 : 히어로");
-    }
+	public void printMap() {
+		System.out.println("==== 맵 상태 ====");
+		for (int i = 0; i < MAP_SIZE; i++) {
+			if (map[i] != null) {
+				if (map[i] instanceof Hero) {
+					System.out.print("🏃 ");
+				} else if (map[i] instanceof Boss) {
+					if (map[i] == boss) {
+						System.out.print("🐲 ");
+					} else {
+						System.out.print("🧟 ");
+					}
+				}
+			} else {
+				System.out.print("⬜ ");
+			}
+		}
+		System.out.println();
+	}
 
-    public void gamePlay() {
-        System.out.println("현재 위치 = " + hero.getPos());
-        System.out.println("앞으로 이동하기(1), 종료하기(2): ");
-        System.out.println("====================");
-        int move = scanner.nextInt();
+	public void gamePlay() {
+		System.out.println("현재 위치 = " + hero.getPos());
+		System.out.println("앞으로 이동하기(1), 종료하기(2): ");
+		System.out.println("====================");
+		int move = scanner.nextInt();
 
-        if (move == 1) {
-            hero.setPos(hero.getPos() + 1); 
-        } else if (move == 2) {
-            System.out.println("게임을 종료합니다.");
-            return;
-        }
+		if (move == 1) {
 
-        if (map[hero.getPos()] != null) {
-            Unit enemy = map[hero.getPos()];
-            System.out.println("전투 시작!");
+			hero.setPos(hero.getPos() + 1);
 
-            if (enemy instanceof Boss) {
-                Boss boss = (Boss) enemy;
+		} else if (move == 2) {
+			System.out.println("게임을 종료합니다.");
+			return;
+		}
 
-                while (true) {
-                    System.out.print("공격하기(1), 포션 마시기(2): ");
-                    int action = scanner.nextInt();
+		if (map[hero.getPos()] != null) {
+			Unit enemy = map[hero.getPos()];
+			System.out.println("전투 시작!");
 
-                    if (action == 1) {
-                        hero.attack(boss);
-                        boss.attack(hero);
-                    } else if (action == 2) {
-                        hero.recovery();
-                    }
+			if (enemy instanceof Boss) {
+				Boss boss = (Boss) enemy;
 
-                    if (hero.getHp() <= 0) {
-                        System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
-                        return;
-                    }
+				while (true) {
+					System.out.print("공격하기(1), 포션 마시기(2): ");
+					int action = scanner.nextInt();
 
-                    if (boss.getHp() <= 0) {
-                        System.out.println("보스를 처치했습니다!");
-                        map[hero.getPos()] = null;
-                        break;
-                    }
-                }
-            } 
-            else {
-                System.out.println("좀비를 만났습니다. 전투를 시작합니다!");
+					if (action == 1) {
+						hero.attack(boss);
+						boss.attack(hero);
+					} else if (action == 2) {
+						hero.recovery();
+					}
 
-                while (true) {
-                    System.out.print("공격하기(1), 포션 마시기(2): ");
-                    int action = scanner.nextInt();
+					if (hero.getHp() <= 0) {
+						System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
+						return;
+					}
 
-                    if (action == 1) {
-                        hero.attack(enemy);
-                        enemy.attack(hero);
-                    } else if (action == 2) {
-                        hero.recovery();
-                    }
+					if (boss.getHp() <= 0) {
+						System.out.println("보스를 처치했습니다!");
+						map[hero.getPos()] = null;
+						break;
+					}
+				}
+			} else {
+				System.out.println("좀비를 만났습니다. 전투를 시작합니다!");
 
-                    if (hero.getHp() <= 0) {
-                        System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
-                        return;
-                    }
+				while (true) {
+					System.out.print("공격하기(1), 포션 마시기(2): ");
+					int action = scanner.nextInt();
 
-                    if (enemy.getHp() <= 0) {
-                        System.out.println("좀비를 처치했습니다.");
-                        map[hero.getPos()] = null; 
-                        break;
-                    }
-                }
-            }
-        }
-    }
+					if (action == 1) {
+						hero.attack(enemy);
+						enemy.attack(hero);
+					} else if (action == 2) {
+						hero.recovery();
+					}
 
-    public void setMap() {
-        setZombie();
-    }
+					if (hero.getHp() <= 0) {
+						System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
+						return;
+					}
 
-    public void setZombie() {
-        int zombiesPlaced = 0;
-        int bossPlaced = 0;
+					if (enemy.getHp() <= 0) {
+						System.out.println("좀비를 처치했습니다.");
+						map[hero.getPos()] = null;
+						break;
+					}
+				}
+			}
+		}
+	}
 
-        while (zombiesPlaced < 3) {
-            int position = random.nextInt(MAP_SIZE);
-            if (map[position] == null) {
-                zombies[zombiesPlaced] = new Boss(position, 100, 10, 0);
-                map[position] = zombies[zombiesPlaced];
-                zombiesPlaced++;
-            }
-        }
+	public void setMap() {
+		map[hero.getPos()] = hero;
+		setZombie();
+	}
 
-        while (bossPlaced < 1) {
-            int position = random.nextInt(MAP_SIZE);
-            if (map[position] == null) {
-                map[position] = boss;
-                bossPlaced++;
-            }
-        }
-    }
+	public void setZombie() {
+		int zombiesPlaced = 0;
+		int bossPlaced = 0;
 
-    public void backMoveAndCreateZombie() {
-        if (random.nextInt(100) == 0) {
-            int newPos = hero.getPos() - 1;
-            hero.setPos(newPos);
+		while (zombiesPlaced < 3) {
+			int position = random.nextInt(MAP_SIZE);
+			if (map[position] == null) {
+				zombies[zombiesPlaced] = new Boss(position, 100, 10, 0);
+				map[position] = zombies[zombiesPlaced];
+				zombiesPlaced++;
+			}
+		}
 
-            int zombiePos = newPos;
-            map[zombiePos] = new Boss(zombiePos, 100, 10, 0);
+		while (bossPlaced < 1) {
+			int position = random.nextInt(MAP_SIZE);
+			if (map[position] == null) {
+				map[position] = boss;
+				bossPlaced++;
+			}
+		}
+	}
 
-            System.out.println("늪에 빠져 돌아갑니다. 그 자리에 좀비가 생성되었습니다!");
-        }
-    }
+	public void backMoveAndCreateZombie() {
+		if (random.nextInt(100) == 0) {
+			int newPos = hero.getPos() - 1;
+			hero.setPos(newPos);
 
-    public boolean gameOver() {
-        if (hero.getHp() <= 0) {
-            System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
-            return true;
-        } else if (hero.getPos() >= MAP_SIZE) {
-            System.out.println("맵 끝에 도달했습니다. 게임에서 이겼습니다.");
-            return true;
-        }
-        return false;
-    }
+			int zombiePos = newPos;
+			map[zombiePos] = new Boss(zombiePos, 100, 10, 0);
 
-    public Unit[] getMap() {
-        return map;
-    }
+			System.out.println("늪에 빠져 돌아갑니다. 그 자리에 좀비가 생성되었습니다!");
+		}
+	}
+
+	public boolean gameOver() {
+		if (hero.getHp() <= 0) {
+			System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
+			return true;
+		} else if (hero.getPos() >= MAP_SIZE) {
+			System.out.println("맵 끝에 도달했습니다. 게임에서 이겼습니다.");
+			return true;
+		}
+		return false;
+	}
+
+	public Unit[] getMap() {
+		return map;
+	}
 }
