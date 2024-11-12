@@ -47,8 +47,8 @@ abstract public class Unit {
 		this.shield = shield;
 	}
 
-	abstract void attack(Unit unit);
+	public abstract void attack(Unit unit);
 
-	abstract void bloodHeal(Unit unit);
+	public abstract void bloodHeal(Unit unit);
 
 }

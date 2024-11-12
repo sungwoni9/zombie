@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Zombie extends Unit {
 
-	int power;
+	private int power;
 
 	public Zombie(int pos, int hp, int maxPower, int shield) {
 		super(pos, hp, maxPower, shield);
