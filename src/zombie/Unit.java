@@ -3,17 +3,16 @@ package zombie;
 import java.util.Random;
 
 abstract public class Unit {
-	public int hp;
+	public static int hp;
 	public int pos;
+	static int maxPower;
+	private int shield;
+	Random random = new Random();
 
-	int maxPower;
-	public final int MAX_MAP = 15;
-	Random random;
-
-	public Unit(int pos, int hp, int maxPower) {
+	public Unit(int pos, int hp, int maxPower, int shield) {
 		this.pos = pos;
-		this.hp = hp;
-		this.maxPower = maxPower;
+		Unit.hp = hp;
+		Unit.maxPower = maxPower;
 	}
 
 	public void setPos(int pos) {
@@ -25,24 +24,31 @@ abstract public class Unit {
 	}
 
 	public void setHp(int hp) {
-		this.hp = hp;
+		Unit.hp = hp;
 	}
 
 	public int getHp() {
 		return hp;
 	}
 
-	public int getmaxPower() {
+	public static int getmaxPower() {
 		return maxPower;
 	}
 
-	public void move(int pos) {
-		if (pos <= MAX_MAP) {
-			pos++;
-			System.out.println("오른쪽으로 한칸 이동~");
-		}
+	public void setMaxPower(int maxPower) {
+		Unit.maxPower = maxPower;
+	}
+
+	public int getShield() {
+		return shield;
+	}
+
+	public void setShield(int shield) {
+		this.shield = shield;
 	}
 
 	abstract void attack(Unit unit);
+
+	abstract void bloodHeal(Unit unit);
 
 }

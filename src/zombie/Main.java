@@ -1,5 +1,8 @@
 package zombie;
 
-public class SetGame {
-
+public class Main {
+	public static void main(String[] args) {
+		GameSetting zombieGame = new GameSetting();
+		zombieGame.run();
+	}
 }
