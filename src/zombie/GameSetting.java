@@ -12,7 +12,7 @@ public class GameSetting {
 	private Random random;
 
 	private Hero hero;
-	private Zombie[] zombies;
+	private Boss[] zombies;
 	private Boss boss;
 
 	public GameSetting() {
@@ -20,7 +20,7 @@ public class GameSetting {
 		random = new Random();
 		scanner = new Scanner(System.in);
 		hero = new Hero(currentPos, 200, 200, 5);
-		zombies = new Zombie[3];
+		zombies = new Boss[3];
 		boss = new Boss(10, 300, 300, 50);
 	}
 
@@ -56,16 +56,16 @@ public class GameSetting {
 			Unit enemy = map[hero.getPos()];
 
 			System.out.println("보스좀비를 만났습니다. 전투를 시작합니다!");
-			if (enemy instanceof Zombie) {
-				Zombie boss = (Zombie) enemy;
+			if (enemy instanceof Boss) {
+				Boss boss = (Boss) enemy;
 
 				while (true) {
 					System.out.print("공격하기(1), 포션 마시기(2): ");
 					int action = scanner.nextInt();
 
 					if (action == 1) {
-						boss.attack(hero);
 						hero.attack(boss);
+						boss.attack(hero);
 					} else if (action == 2) {
 						hero.recovery();
 					}
@@ -121,7 +121,7 @@ public class GameSetting {
 		while (zombiesPlaced < 3) {
 			int position = random.nextInt(MAP_SIZE);
 			if (map[position] == null) {
-				zombies[zombiesPlaced] = new Zombie(position, 100, 10, 0);
+				zombies[zombiesPlaced] = new Boss(position, 100, 10, 0);
 				map[position] = zombies[zombiesPlaced];
 				zombiesPlaced++;
 			}
@@ -142,7 +142,7 @@ public class GameSetting {
 			hero.setPos(newPos);
 
 			int zombiePos = newPos;
-			map[zombiePos] = new Zombie(zombiePos, 100, 10, 0);
+			map[zombiePos] = new Boss(zombiePos, 100, 10, 0);
 
 			System.out.println("늪에 빠져 돌아갑니다. 그 자리에 좀비가 생성되었습니다!");
 		}
