@@ -7,6 +7,7 @@ public class GameSetting {
 	int currentPos = 1;
 	private final int MAP_SIZE = 20;
 	private Unit[] map;
+
 	private Scanner scanner;
 	private Random random;
 
@@ -24,6 +25,8 @@ public class GameSetting {
 	}
 
 	public void run() {
+		printBoard();
+		setMap();
 		while (!gameOver()) {
 			gamePlay();
 		}
@@ -41,7 +44,6 @@ public class GameSetting {
 		System.out.println("현재 위치 = " + hero.getPos());
 		System.out.println("앞으로 이동하기(1), 종료하기(2): ");
 		System.out.println("====================");
-
 		int move = scanner.nextInt();
 
 		if (move == 1) {
@@ -49,6 +51,62 @@ public class GameSetting {
 		} else if (move == 2) {
 			System.out.println("게임을 종료합니다.");
 			return;
+		}
+		if (map[hero.getPos()] != null) {
+			Unit enemy = map[hero.getPos()];
+
+			System.out.println("보스좀비를 만났습니다. 전투를 시작합니다!");
+			if (enemy instanceof Zombie) {
+				Zombie boss = (Zombie) enemy;
+
+				while (true) {
+					System.out.print("공격하기(1), 포션 마시기(2): ");
+					int action = scanner.nextInt();
+
+					if (action == 1) {
+						boss.attack(hero);
+						hero.attack(boss);
+					} else if (action == 2) {
+						hero.recovery();
+					}
+
+					if (hero.getHp() <= 0) {
+						System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
+						break;
+					}
+
+					if (boss.getHp() <= 0) {
+						System.out.println("보스를 처치했습니다!");
+						break;
+					}
+				}
+
+			} else {
+				System.out.println("좀비를 만났습니다. 전투를 시작합니다!");
+
+				while (true) {
+					System.out.print("공격하기(1), 포션 마시기(2): ");
+					int action = scanner.nextInt();
+
+					if (action == 1) {
+						hero.attack(enemy);
+						enemy.attack(hero);
+					} else if (action == 2) {
+
+						hero.recovery();
+					}
+
+					if (hero.getHp() <= 0) {
+						System.out.println("Hero가 죽었습니다. 게임에서 졌습니다.");
+						break;
+					}
+
+					if (enemy.getHp() <= 0) {
+						System.out.println("좀비를 처치했습니다.");
+						break;
+					}
+				}
+			}
 		}
 	}
 
