@@ -13,7 +13,7 @@
 <br><br>
 
 ### Class Diagram
-![클래스다이어그램](https://github.com/SG5143/zombi/blob/main/resources/classDiagram.png)
+![클래스다이어그램](https://github.com/sungwoni9/zombie/blob/main/resource/classDiagram.png)
 
 <br><br>
 
