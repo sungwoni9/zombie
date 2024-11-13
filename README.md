@@ -27,18 +27,5 @@
 
 ### Tree
 ```
-📦src
- ┣ 📂constants
- ┃ ┗ 📜WeaponConstants.java
- ┣ 📂interfaces
- ┃ ┗ 📜Enemy.java
- ┣ 📂units
- ┃ ┣ 📜Boss.java
- ┃ ┣ 📜Hero.java
- ┃ ┣ 📜Unit.java
- ┃ ┗ 📜Zombie.java
- ┗  📂zombi
-   ┣ 📜Game.java
-   ┗ 📜Main.java
 
 ```
